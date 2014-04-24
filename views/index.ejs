@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" ng-app="despicable">
+  <head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/css/style.css' />
+  </head>
+  <body ng-controller="mainController">
+    <div class="container">
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <p><%= description %>.</p>
+    <br><br><br>
+
+    <p><strong>Login in Newbie</strong></p>
+    <form action="/enter/" method="post">
+    <p>E-mail: <input type="text" name="email"></p>
+    <p>Password: <input type="password" name="password"></p>
+    <p><input type="submit" value="be happy"></p>
+    </form>
+    <br><br><br>
+
+    <p><a href="/signup/newbie">>> Signup like newbie</a></p>
+    <p><a href="/signup/enterprise">>> Signup like enterprise</a></p>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" ng-app="despicable">
+  <head>
+    <meta charset="utf-8">
+    <title>Enter like <%= account %></title>
+    <link rel='stylesheet' href='/css/style.css' />
+  </head>
+  <body ng-controller="<%= account %>Signup">
+    <div class="container">
+    <h1><%= title %></h1>
+    <p><%= description %></p>
+    <br>
+    <!-- <p><a ng-click="logout()">Logout</a></p> -->
+
+    <p><a href="#" ng-click="connectFB()" class="logInFacebook">Connect with Facebook</a></p>
+
+    <p><img ng-src="{{imageSource}}"/></p>
+
+    <p class="another">
+      <form action="/register/<%= account %>/" method="post">
+          <div ng-include="<%= account %>"></div>
+      </form>
+    </p>
+
+    <br>
+    <p><a href="/">back to Home</a></p>
+    </div>
+
+    <div id="fb-root"></div>
+    <script src='../lib/angular/angular.js'></script>
+    <script src="../lib/angular/angular-route.js"></script>
+    <script src='../js/app.js'></script>
+    <script src='../js/services.js'></script>
+    <script src='../js/controllers.js'></script>
+    <script src='../js/filters.js'></script>
+    <script src='../js/directives.js'></script>
+  </body>
+</html>
