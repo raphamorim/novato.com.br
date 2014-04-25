@@ -4,21 +4,6 @@
 
 angular.module('myApp.controllers', [])
 
-.controller('mainController', function($scope) {
-    $scope.loginFB = function() {
-        FB.Event.subscribe('auth.authResponseChange', function(response) {
-            // Here we specify what we do with the response anytime this event occurs.
-            if (response.status === 'connected') {
-                $scope.status = 'connected';
-            } else if (response.status === 'not_authorized') {
-                $scope.status = 'not_authorized';
-            } else {
-                $scope.status = '???';
-            }
-        });
-    };
-})
-
 .controller('newbieSignup', function($scope) {
     $scope.connectFB = function() {
         FB.login(function(response) {

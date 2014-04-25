@@ -9,7 +9,8 @@ var express = require('express'),
     path = require('path'),
     mongoose = require('mongoose'),
     middleware = require('./middleware'),
-    env = require('./config/environment');
+    env = require('./config/environment'),
+    auth = middleware.auth;
 
 var app = express();
 
@@ -35,11 +36,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', middleware.auth, routes.index);
-app.get('/signup/:account', middleware.auth, routes.signUp);
-app.post('/register/:account', middleware.auth, routes.register);
-app.get('/partial/forms/:name', middleware.auth, routes.partialForms);
-app.get('/home', middleware.checkAuth, routes.home);
+app.get('/', auth, routes.index);
+app.get('/signup/:account', auth, routes.signUp);
+app.post('/register/:account', auth, routes.register);
+app.get('/partial/forms/:name', auth, routes.partialForms);
+app.get('/home', auth, routes.home);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('\n[LOG] Newbie on port ' + app.get('port'));
