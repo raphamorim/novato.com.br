@@ -1,13 +1,11 @@
-exports.checkAuth = function(req, res, next) {
-    if (!req.session.userId)
-        res.status(401).json('You are not authorized to view this page');
-    else
-        next();
-}
-
 exports.auth = function(req, res, next) {
-    if (req.session.userId)
-        res.redirect('/home');
+    var privatePages = ['/home'];
+
+    if(privatePages.indexOf(req.url) >= 0)
+        if (!req.session.userId)
+            return res.send(401, 'You are not authorized to view this page')
     else
-        next();
+        if (req.session.userId) res.redirect('/home')
+
+    next();
 }
