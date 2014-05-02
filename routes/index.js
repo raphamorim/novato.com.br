@@ -1,5 +1,6 @@
 var Newbie = require('../models/newbie'),
-    Enterprise = require('../models/enterprise');
+    Enterprise = require('../models/enterprise'),
+    bcrypt = require('bcrypt');
 
 // Routes
 exports.index = function(req, res) {
@@ -49,5 +50,11 @@ exports.home = function(req, res) {
 }
 
 exports.login = function(req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    Newbie.findOne({'email': email}, function(err, newbie) {
+        res.send(newbie);
+    });
 
 }
