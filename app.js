@@ -40,6 +40,7 @@ app.get('/', auth, routes.index);
 app.get('/signup/:account', auth, routes.signUp);
 app.post('/register/:account', auth, routes.register);
 app.get('/partial/forms/:name', auth, routes.partialForms);
+app.get('/enter/', routes.login);
 app.get('/home', auth, routes.home);
 
 http.createServer(app).listen(app.get('port'), function(){
