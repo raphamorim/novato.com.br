@@ -1,5 +1,5 @@
-var Newbie = require('../models/newbie'),
-    Enterprise = require('../models/enterprise');
+var Client = require('../models/client'),
+    bcrypt = require('bcrypt');
 
 // Routes
 exports.index = function(req, res) {
@@ -12,7 +12,8 @@ exports.index = function(req, res) {
 exports.signUp = function(req, res) {
     var account = req.params.account;
 
-    if (account != 'enterprise' && account != 'newbie') res.send(404).end();
+    if (account != 'enterprise' && account != 'newbie')
+        res.send(404).end();
 
     res.render('signup', {
         account: account,
@@ -26,34 +27,30 @@ exports.partialForms = function(req, res) {
 };
 
 exports.register = function(req, res) {
-    var account = req.params.account;
+    req.body.type = req.params.account;
 
-    switch (account) {
-        case 'newbie':
-            new Newbie(req.body).save(function(err, user) {
-                if (err) {
-                    return res.json(err).status(400);
-                } else {
-                    req.session.type = 'newbie';
-                    req.session.userId = user._id;
-                    res.redirect('/home');
-                }
-            });
-            break;
-        case 'enterprise':
-            new Enterprise(req.body).save(function(err, user) {
-                if (err) {
-                    return res.json(err).status(400);
-                } else {
-                    req.session.type = 'enterprise';
-                    req.session.userId = user._id;
-                    res.redirect('/home');
-                }
-            });
-            break;
-    }
+    new Client(req.body).save(function(err, user) {
+        if(err) return res.send(err);
+
+        req.session.userId = user._id;
+        res.redirect('/home');
+    });
 };
 
 exports.home = function(req, res) {
-    res.send("Welcome " + req.session.userId + "\n you as " + req.session.type);
+    res.send("Welcome " + req.session.userId);
+}
+
+exports.login = function(req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    Client.findOne({'email': email}, function(err, user) {
+        bcrypt.compare(password, user.password, function(err, match) {
+            if(match === true)
+                res.send('True');
+            else
+                res.send('False');
+        });
+    });
 }
