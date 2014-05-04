@@ -31,6 +31,14 @@ var client = new Schema({
     versionKey: false
 });
 
+client.path('email').validate(function(email, respond){
+    var sentId = this._id;
+    var Client = mongoose.model('Client');
+    Client.findOne({'email': email}, function(err, user){
+        respond(user === null || user._id.toString() === sentId.toString());
+    });
+}, 'Duplicated value of "{PATH}", "{VALUE}" already exists.');
+
 client.pre('save', function(next) {
     var user = this;
     if (!user.isModified('password')) return next();
