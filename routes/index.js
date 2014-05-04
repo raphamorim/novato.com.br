@@ -1,5 +1,4 @@
-var Newbie = require('../models/newbie'),
-    Enterprise = require('../models/enterprise'),
+var Client = require('../models/client'),
     bcrypt = require('bcrypt');
 
 // Routes
@@ -28,33 +27,30 @@ exports.partialForms = function(req, res) {
 };
 
 exports.register = function(req, res) {
-    var account = req.params.account;
+    req.body.type = req.params.account;
 
-    if (account === 'newbie') {
-        new Newbie(req.body).save(function(err, user) {
-            req.session.type = account;
-            req.session.userId = user._id;
-        });
-    } else if (account === 'enterprise') {
-        new Enterprise(req.body).save(function(err, user) {
-            req.session.type = account;
-            req.session.userId = user._id;
-        });
-    }
+    new Client(req.body).save(function(err, user) {
+        if(err) return res.send(err);
 
-    res.redirect('/home');
+        req.session.userId = user._id;
+        res.redirect('/home');
+    });
 };
 
 exports.home = function(req, res) {
-    res.send("Welcome " + req.session.userId + "\n you as " + req.session.type);
+    res.send("Welcome " + req.session.userId);
 }
 
 exports.login = function(req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    Newbie.findOne({'email': email}, function(err, newbie) {
-        res.send(newbie);
+    Client.findOne({'email': email}, function(err, user) {
+        bcrypt.compare(password, user.password, function(err, match) {
+            if(match === true)
+                res.send('True');
+            else
+                res.send('False');
+        });
     });
-
 }
