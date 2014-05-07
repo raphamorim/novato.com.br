@@ -47,10 +47,12 @@ exports.login = function(req, res) {
 
     Client.findOne({'email': email}, function(err, user) {
         bcrypt.compare(password, user.password, function(err, match) {
-            if(match === true)
-                res.send('True');
-            else
-                res.send('False');
+            if(match === true) {
+                req.session.userId = user._id;
+                res.redirect('/home');
+            } else {
+                // error ocurred on login :/
+            }
         });
     });
 }
