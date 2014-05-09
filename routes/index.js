@@ -1,7 +1,7 @@
 var Client = require('../models/client'),
     bcrypt = require('bcrypt');
 
-// Routes
+// All project routes
 exports.index = function(req, res) {
     res.render('index', {
         title: 'Newbie Project',
@@ -38,7 +38,11 @@ exports.register = function(req, res) {
 };
 
 exports.home = function(req, res) {
-    res.send("Welcome " + req.session.userId);
+    var userId = req.session.userId;
+
+    Client.findOne({'_id': userId}, function(err, user) {
+        res.send('Welcome ' + user.name);
+    });
 }
 
 exports.login = function(req, res) {
