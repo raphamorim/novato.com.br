@@ -40,7 +40,7 @@ exports.register = function(req, res) {
 exports.home = function(req, res) {
     var userId = req.session.userId;
 
-    Client.findOne({'_id': userId}, function(err, user) {
+    Client.findById(userId, function (err, user) {
         res.send('Welcome ' + user.name);
     });
 }
