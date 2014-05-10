@@ -1,7 +1,7 @@
 var Client = require('../models/client'),
     bcrypt = require('bcrypt');
 
-// Routes
+// All project routes
 exports.index = function(req, res) {
     res.render('index', {
         title: 'Newbie Project',
@@ -38,7 +38,11 @@ exports.register = function(req, res) {
 };
 
 exports.home = function(req, res) {
-    res.send("Welcome " + req.session.userId);
+    var userId = req.session.userId;
+
+    Client.findById(userId, function (err, user) {
+        res.send('Welcome ' + user.name);
+    });
 }
 
 exports.login = function(req, res) {
@@ -47,10 +51,12 @@ exports.login = function(req, res) {
 
     Client.findOne({'email': email}, function(err, user) {
         bcrypt.compare(password, user.password, function(err, match) {
-            if(match === true)
-                res.send('True');
-            else
-                res.send('False');
+            if(match === true) {
+                req.session.userId = user._id;
+                res.redirect('/home');
+            } else {
+                // error ocurred on login :/
+            }
         });
     });
 }
